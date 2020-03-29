@@ -22,6 +22,7 @@ export default class Main extends React.Component {
 			'Setting a timer'
 		];
 		this.state = { max10: 0, idealRow: [], differenceValues: [],spinner: false, update:false };
+		this.getDisplayTextStyle = this.getDisplayTextStyle.bind(this)
 	}
 
 	componentDidMount() {
@@ -137,29 +138,36 @@ export default class Main extends React.Component {
 			.then(() => this.props.navigation.navigate('LoginScreen'))
 	}
 
+	getDisplayTextStyle(value) {
+		if (value <= 0)
+			return styles.RedOutputText
+		else
+		return styles.GreenOutputText
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
 				<Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
 				<ScrollView style={styles.ScrollStyle}>
-					<Text style={styles.TextStyle}>Parameter 1 - {this.state.differenceValues['Para-001']} </Text>
-					<Text style={styles.TextStyle}>Parameter 2 - {this.state.differenceValues['Para-002']}</Text>
-					<Text style={styles.TextStyle}>Parameter 3 - {this.state.differenceValues['Para-003']}</Text>
-					<Text style={styles.TextStyle}>Parameter 4 - {this.state.differenceValues['Para-004']}</Text>
-					<Text style={styles.TextStyle}>Parameter 5 - {this.state.differenceValues['Para-005']}</Text>
-					<Text style={styles.TextStyle}>Parameter 6 - {this.state.differenceValues['Para-006']}</Text>
-					<Text style={styles.TextStyle}>Parameter 7 - {this.state.differenceValues['Para-007']}</Text>
-					<Text style={styles.TextStyle}>Parameter 8 - {this.state.differenceValues['Para-008']}</Text>
-					<Text style={styles.TextStyle}>Parameter 9 - {this.state.differenceValues['Para-009']}</Text>
-					<Text style={styles.TextStyle}>Parameter 10 -{this.state.differenceValues['Para-010']}</Text>
-					<Text style={styles.TextStyle}>Parameter 11 -{this.state.differenceValues['Para-011']}</Text>
-					<Text style={styles.TextStyle}>Parameter 12 -{this.state.differenceValues['Para-012']}</Text>
-					<Text style={styles.TextStyle}>Parameter 13 -{this.state.differenceValues['Para-013']}</Text>
-					<Text style={styles.TextStyle}>Parameter 14 -{this.state.differenceValues['Para-014']}</Text>
-					<Text style={styles.TextStyle}>Parameter 15 -{this.state.differenceValues['Para-015']}</Text>
-					<Text style={styles.TextStyle}>Parameter 16 -{this.state.differenceValues['Para-016']}</Text>
-					<Text style={styles.TextStyle}>Parameter 17 -{this.state.differenceValues['Para-017']}</Text>
-					<Text style={styles.TextStyle}>Parameter 18 -{this.state.differenceValues['Para-018']}</Text>
+					<Text style={styles.TextStyle}>Parameter 01 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-001'])}>{this.state.differenceValues['Para-001']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 02 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-002'])}>{this.state.differenceValues['Para-002']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 03 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-003'])}>{this.state.differenceValues['Para-003']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 04 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-004'])}>{this.state.differenceValues['Para-004']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 05 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-005'])}>{this.state.differenceValues['Para-005']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 06 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-006'])}>{this.state.differenceValues['Para-006']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 07 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-007'])}>{this.state.differenceValues['Para-007']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 08 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-008'])}>{this.state.differenceValues['Para-008']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 09 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-009'])}>{this.state.differenceValues['Para-009']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 10 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-010'])}>{this.state.differenceValues['Para-010']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 11 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-011'])}>{this.state.differenceValues['Para-011']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 12 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-012'])}>{this.state.differenceValues['Para-012']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 13 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-013'])}>{this.state.differenceValues['Para-013']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 14 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-014'])}>{this.state.differenceValues['Para-014']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 15 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-015'])}>{this.state.differenceValues['Para-015']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 16 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-016'])}>{this.state.differenceValues['Para-016']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 17 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-017'])}>{this.state.differenceValues['Para-017']}</Text></Text>
+					<Text style={styles.TextStyle}>Parameter 18 : <Text style={this.getDisplayTextStyle(this.state.differenceValues['Para-018'])}>{this.state.differenceValues['Para-018']}</Text></Text>
 				</ScrollView>
 				<View style={styles.Innercontainer}>
 					<Button dark style={styles.ButtonBox} onPress={this.calculatingPara10.bind(this)}>
@@ -207,4 +215,13 @@ const styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 20,
 	},
+
+	RedOutputText : {
+		color: 'red',
+	},
+
+	GreenOutputText : {
+		color: 'green',
+	}
+
 })

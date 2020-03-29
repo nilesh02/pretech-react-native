@@ -44,8 +44,11 @@ export default class Register extends Component {
 			firebase
 				.auth()
 				.createUserWithEmailAndPassword(this.state.email, this.state.Password)
-				.then(() => this.props.navigation.navigate('MainScreen'))
-				.catch(error => this.displayError(error));
+				.then(() => {
+					this.setState({spinner:false});
+					this.props.navigation.navigate('MainScreen');
+				})
+				.catch(error => alert(error));
 			
 		}
 		else {

@@ -5,6 +5,8 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import * as d3 from 'd3';
 import { decode, encode } from 'base-64';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 
 if (!global.btoa) { global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -19,7 +21,7 @@ export default class Main extends React.Component {
 		console.ignoredYellowBox = [
 			'Setting a timer'
 		];
-		this.state = { max10: 0, idealRow: [], differenceValues: [] };
+		this.state = { max10: 0, idealRow: [], differenceValues: [],spinner: false, update:false };
 	}
 
 	componentDidMount() {
@@ -38,19 +40,20 @@ export default class Main extends React.Component {
 	}
 
 	calculatingPara10() {
+		this.setState({ spinner: true ,update:false});
 		firebase.storage().ref('data.csv').getDownloadURL().then(function (url) {
 			d3.csv(url).then(function (result) {
 				var len = result.length;
 				if (len == 1) {
 					let temp = result[0]['Para-010'] / 5;
-					this.setState({ max10: temp, idealRow: result[0] });
+					this.setState({ max10: temp, idealRow: result[0] , update:true});
 				}
 				else {
 					// calculating delta 10
 					let delta10 = (result[len - 1]['Para-010'] - result[len - 2]['Para-010']) / 5;
 					if (delta10 > this.state.max10) {
 						// current row is ideal one so update the ideal conditions
-						this.setState({ max10: delta10, idealRow: result[len - 1] });
+						this.setState({ max10: delta10, idealRow: result[len - 1] , update:true});
 					}
 					else if (delta10 < this.state.max10) {
 						// difference of two rows for all the parameters with ideal row
@@ -69,7 +72,7 @@ export default class Main extends React.Component {
 
 						if (currPara6 < prevPara6) {
 							// current row is the ideal one
-							this.setState({ idealRow: result[len - 1] });
+							this.setState({ idealRow: result[len - 1] , update:true});
 						}
 						else if (currPara6 > prevPara6) {
 							// previous row was the ideal one
@@ -79,7 +82,7 @@ export default class Main extends React.Component {
 								let key = result.columns[i];
 								temp[key] = this.state.idealRow[key] - result[len - 1][key];
 							}
-							this.setState({ differenceValues: temp });
+							this.setState({ differenceValues: temp});
 						}
 						else if (currPara6 == prevPara6) {
 							console.log("In Para 1");
@@ -107,20 +110,22 @@ export default class Main extends React.Component {
 							}
 							else {
 								// current row is ideal one
-								this.setState({ idealRow: result[len - 1] });
+								this.setState({ idealRow: result[len - 1] , update:true});
 							}
 						}
 					}
 				}
 
-				if (firebase.auth().currentUser) {
+				if (firebase.auth().currentUser && this.state.update==true) {
+					console.log("Updating Firebase");
 					const firestore = firebase.firestore();
 					firestore.collection("collections").doc("documents").update({
 						maxValue: this.state.max10,
 						idealValues: this.state.idealRow
 					});
 				}
-
+				this.setState({ spinner: false});
+				
 			}.bind(this))
 		}.bind(this), function (error) {
 			console.log(error);
@@ -135,6 +140,7 @@ export default class Main extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
+				<Spinner visible={this.state.spinner} textContent={'Loading...'} textStyle={styles.spinnerTextStyle} />
 				<ScrollView style={styles.ScrollStyle}>
 					<Text style={styles.TextStyle}>Parameter 1 - {this.state.differenceValues['Para-001']} </Text>
 					<Text style={styles.TextStyle}>Parameter 2 - {this.state.differenceValues['Para-002']}</Text>
@@ -173,6 +179,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#ededed',
 		justifyContent: 'center'
+	},
+	spinnerTextStyle: {
+		color: '#FFF'
 	},
 	ScrollStyle: {
 		flex: 0.75,

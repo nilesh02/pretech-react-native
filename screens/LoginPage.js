@@ -16,7 +16,10 @@ export default class Login extends Component {
 		Password:'',PasswordErrorFlag:false,PasswordSuccessFlag:false,
 		spinner: false};
 	}
-	
+    
+    componentDidMount() {
+        this.setState({email: '', Password:''});
+    }
 	checkemail(emailId)
 	{
 		if(emailId.length>10 && emailId.includes("@gmail.com"))

@@ -4,6 +4,13 @@
     "slug": "sample-react-native",
     "privacy": "public",
     "sdkVersion": "36.0.0",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.pretech.pretech",
+      "versionCode": 1
+    },
     "platforms": [
       "ios",
       "android",
@@ -23,8 +30,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    }
+    "description": ""
   }
 }
